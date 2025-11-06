@@ -1,0 +1,5 @@
+{
+fecha_formato = "%d/%m/%Y"      #Formato en que están escritas las fechas dentro del archivo CSV
+
+columnas_salida = ["Producto", "fecha_inicio", "fecha_fin", "cantidad", "valor_total"]  #Archivo de salida
+}
