@@ -1,15 +1,14 @@
 import csv
-
 from datetime import datetime
-from src.secundario import leer_argumentos, leer_csv
+from src.secundario import leer_argumentos, leer_csv, escribir_csv, leer_configuracion
 
-def procesar_ventas(filas):
+def procesar_ventas(filas, fecha_formato):
     datos = {}
     for fila in filas:
         prod = fila["Producto"]
         cant = int(fila["Cantidad"])
         precio = float(fila["ValorUnitario"])
-        fecha = datetime.strptime(fila["Fecha"], "%d/%m/%Y")
+        fecha = datetime.strptime(fila["Fecha"], fecha_formato)
 
         if prod not in datos:
             datos[prod] = {
@@ -29,21 +28,6 @@ def procesar_ventas(filas):
     return datos
 
 
-def escribir_csv(archivo_out, datos):
-    campos = ["Producto", "FechaInicio", "FechaFin", "Cantidad", "ValorTotal"]
-
-    with open(archivo_out, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=campos)
-        writer.writeheader()
-        for prod, info in datos.items():
-            writer.writerow({
-                "Producto": prod,
-                "FechaInicio": info["fecha_inicio"].strftime("%d/%m/%Y"),
-                "FechaFin": info["fecha_fin"].strftime("%d/%m/%Y"),
-                "Cantidad": info["cantidad"],
-                "ValorTotal": round(info["valor_total"], 2)
-            })
-
 def mostrar_resultados(datos):
     for prod, info in datos.items():
         print(f"Producto: {prod}")
@@ -55,10 +39,11 @@ def mostrar_resultados(datos):
 
 def main():
     archivo_in, archivo_out = leer_argumentos()
+    config = leer_configuracion()
     filas = leer_csv(archivo_in)
-    datos = procesar_ventas(filas)
-    escribir_csv(archivo_out, datos)
+    datos = procesar_ventas(filas, config["fecha_formato"])
+    escribir_csv(archivo_out, datos, config["columnas_salida"])
     mostrar_resultados(datos)
 
-if __name__ == "_main_":
+if __name__ == "__main__":
     main()
