@@ -4,11 +4,6 @@ from datetime import datetime
 from src.secundario import leer_argumentos, leer_csv, escribir_csv, leer_configuracion
 
 
-def leer_configuracion(ruta_config="config.toml"):
-    with open(ruta_config, "r", encoding="utf-8") as f:
-        config = toml.load(f)
-    return config
-
 def procesar_ventas(filas, fecha_formato):
     datos = {}
     for fila in filas:

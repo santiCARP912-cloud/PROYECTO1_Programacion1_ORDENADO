@@ -1,5 +1,11 @@
 import csv
 import argparse
+import toml
+
+def leer_configuracion():
+    with open("src/config.toml", "r", encoding="utf-8") as f:
+        config = toml.load(f)
+    return config
     
 
 def leer_argumentos():
